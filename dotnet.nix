@@ -7,10 +7,6 @@
 , zlib
 , curl
 }:
-
-let
-  rpath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc libunwind icu openssl zlib curl ];
-in
   stdenv.mkDerivation rec {
     version = "2.1.402";
     netCoreVersion = "2.1.5";
@@ -50,4 +46,3 @@ in
       description = ".NET Core SDK ${version} with .NET Core ${netCoreVersion}";
     };
   }
-

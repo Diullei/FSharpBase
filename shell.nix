@@ -9,9 +9,11 @@ let
 
 
   dotnet = ps1812.callPackage ( import ./dotnet.nix ) {};
+  fake =  ps1812.callPackage ( import ./fake-darwin.nix ) {};
+  paket = ps1812.callPackage ( import ./paket.nix ) {};
 
   vscode = 
-    #buildVSCode can be found in https://gi`hub.com/countoren/nixpkgs/blob/master/config.nix
+    #buildVSCode can be found in https://github.com/countoren/nixpkgs/blob/master/config.nix
     buildVSCode {
       settingsFile = ./vscode/settings.nix;
       vscodeMatketExtensions = [
@@ -49,14 +51,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     figlet
     dotnet
+    fake
+    paket
     ps1812.git
-    ps1812.mono
+    ps1812.mono514
     ps1812.fsharp
-    ps1812.dotnetPackages.Fake
-    ps1812.dotnetPackages.Paket
+    ps1812.yarn
+    ps1812.nodejs-10_x
   ] 
   ++ vscode.buildInputs;
   shellHook = ''
+    #this will dotnet trying to catch packages in dotnet folder in nixstore(cannot be done due to permissions)
+    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
     figlet "wellcome to FS test"
   ''
   + vscode.shellHook;
